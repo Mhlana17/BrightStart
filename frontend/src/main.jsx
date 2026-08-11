@@ -6,7 +6,7 @@ const pages = ["home", "programs", "booking", "progress", "about"];
 
 const programs = [
     {
-        title: "Reading Lesson",
+        title: "Reading Lessons",
         color: "green",
         icon: BookIcon,
         body: "Phonics, word recognition, reading fluency and comprehension."
