@@ -1,0 +1,24 @@
+<svg width="720" height="520" viewBox="0 0 720 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="720" height="520" rx="48" fill="#F7FBFF"/>
+    <ellipse cx="355" cy="460" rx="260" ry="34" fill="#D7E7F7"/>
+    <path d="M177 250c-12-84 37-155 116-155 65 0 103 46 112 111 8 63-20 123-81 148-72 29-137-32-147-104Z" fill="#FFC83D"/>
+    <path d="M424 242c7-77 58-133 130-118 61 13 95 67 82 133-13 68-63 111-127 105-60-6-91-59-85-120Z" fill="#49C34A"/>
+    <path d="M213 326c40-30 89-34 139-12l-41 113c-38-18-80-13-119 12l21-113Z" fill="#2B7DD6"/>
+    <path d="M491 313c-49-20-92-8-126 29l70 95c30-27 70-36 119-21l-63-103Z" fill="#C35FE8"/>
+    <circle cx="268" cy="183" r="72" fill="#A5663D"/>
+    <circle cx="548" cy="196" r="70" fill="#8D5637"/>
+    <path d="M198 159c28-78 124-94 171-22-55-10-115-1-171 22Z" fill="#54301F"/>
+    <path d="M494 175c17-82 116-100 157-25-46-8-103 0-157 25Z" fill="#5D331F"/>
+    <circle cx="244" cy="197" r="9" fill="#1B1C1F"/>
+    <circle cx="301" cy="197" r="9" fill="#1B1C1F"/>
+    <circle cx="524" cy="209" r="8" fill="#1B1C1F"/>
+    <circle cx="578" cy="209" r="8" fill="#1B1C1F"/>
+    <path d="M253 233c19 15 43 15 61-1" stroke="#753D23" stroke-width="9" stroke-linecap="round"/>
+    <path d="M526 244c17 13 39 13 56-1" stroke="#693820" stroke-width="8" stroke-linecap="round"/>
+    <path d="M132 324c68-28 142-18 211 30v97c-75-51-144-59-211-28v-99Z" fill="#FFFFFF" stroke="#23262B" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M343 354c74-47 145-56 214-29v99c-69-31-140-22-214 28v-98Z" fill="#FFFFFF" stroke="#23262B" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M169 352c42-8 82 0 120 21M169 386c42-7 83 2 120 23M394 374c40-20 82-27 126-20M395 409c41-18 82-24 126-17" stroke="#B7C3CF" stroke-width="8" stroke-linecap="round"/>
+    <path d="M339 350v104" stroke="#23262B" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="356" cy="76" r="35" fill="#FFDD55" stroke="#23262B" stroke-width="7"/>
+    <path d="M356 18v22M356 112v22M299 76h22M391 76h22M316 36l15 15M381 101l15 15M396 36l-15 15M331 101l-15 15" stroke="#23262B" stroke-width="7" stroke-linecap="round"/>
+</svg>

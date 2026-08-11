@@ -1,0 +1,772 @@
+:root {
+    --blue: #2c75c7;
+    --blue-soft: #4c88e6;
+    --green: #49bf45;
+    --purple: #bf59e4;
+    --yellow: #ffd22f;
+    --ink: #111318;
+    --muted: #5a6470;
+    --panel: #f4edf7;
+    --line: #d6d6dc;
+    --shadow: 0 3px 8px rgba(17, 19, 24, .18);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--ink);
+    background: #101114;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    border: 0;
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 280px minmax(360px, 1fr);
+    gap: 32px;
+    align-items: center;
+    padding: 28px clamp(20px, 5vw, 72px);
+}
+
+.desktop-nav {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: #fff;
+    padding: 24px 0;
+}
+
+.brand-lockup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.brand-lockup strong {
+    display: block;
+    font-size: 22px;
+}
+
+.brand-lockup span {
+    color: #b6bcc7;
+}
+
+.brand-logo {
+    width: 56px;
+    height: 56px;
+}
+
+.desktop-nav .nav-link {
+    width: 100%;
+    text-align: left;
+    color: #d8dce5;
+    background: transparent;
+    border-radius: 8px;
+    padding: 14px 16px;
+}
+
+.desktop-nav .nav-link.active,
+.desktop-nav .nav-link:hover {
+    background: #1f2937;
+    color: #fff;
+}
+
+.phone-frame {
+    position: relative;
+    justify-self: center;
+    width: min(100%, 430px);
+    height: min(88vh, 820px);
+    min-height: 720px;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 26px;
+    box-shadow: 0 22px 80px rgba(0, 0, 0, .38);
+}
+
+.screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-bottom: 76px;
+    background: #fff;
+}
+
+.home-screen {
+    padding: 24px 42px 28px;
+}
+
+.home-top,
+.plain-header,
+.screen-header {
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+}
+
+.home-top {
+    justify-content: space-between;
+}
+
+.plain-header {
+    justify-content: center;
+    position: relative;
+    padding: 0 28px;
+}
+
+.screen-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    justify-content: center;
+    color: #fff;
+    padding: 0 24px;
+}
+
+.blue-head .screen-header {
+    background: var(--blue-soft);
+}
+
+.purple-head .screen-header {
+    background: var(--purple);
+}
+
+.green-head .screen-header {
+    background: var(--green);
+}
+
+.screen-header h2,
+.plain-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.icon-button {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    color: currentColor;
+}
+
+.menu-button span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    margin: 2px 0;
+    background: currentColor;
+}
+
+svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.back-button {
+    position: absolute;
+    left: 18px;
+}
+
+.center-brand {
+    text-align: center;
+    margin-top: -8px;
+}
+
+.home-logo {
+    width: 80px;
+    height: 80px;
+}
+
+.center-brand h1 {
+    margin: 0;
+    color: var(--blue);
+    font-size: 26px;
+}
+
+.center-brand p {
+    margin: 0;
+    color: #333;
+    font-size: 19px;
+}
+
+.hero-copy {
+    margin-top: 26px;
+}
+
+.hero-copy h2 {
+    max-width: 300px;
+    margin: 0 0 18px;
+    font-size: 23px;
+    line-height: 1.18;
+}
+
+.hero-copy span,
+.program-card strong,
+.progress-top span {
+    color: var(--green);
+}
+
+.hero-copy p,
+.intro,
+.program-card p,
+.about-body p,
+.comment-card p,
+label,
+.learners-row,
+.summary-card,
+.skill {
+    color: var(--muted);
+}
+
+.hero-copy p {
+    max-width: 260px;
+    margin: 0;
+    font-size: 14px;
+}
+
+.hero-image {
+    display: block;
+    width: 100%;
+    max-height: 245px;
+    object-fit: contain;
+    margin: 6px auto 18px;
+}
+
+.cta-stack {
+    display: grid;
+    gap: 14px;
+}
+
+.primary-action,
+.success-action,
+.muted-action {
+    min-height: 52px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.primary-action {
+    color: #fff;
+    background: var(--blue);
+}
+
+.success-action {
+    color: #fff;
+    background: var(--green);
+}
+
+.muted-action {
+    color: #111318;
+    background: var(--panel);
+}
+
+.screen-body {
+    padding: 22px 46px 28px;
+}
+
+.intro {
+    max-width: 250px;
+    margin: 0 0 22px;
+    font-size: 14px;
+}
+
+.program-list {
+    display: grid;
+    gap: 18px;
+}
+
+.program-card {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 16px;
+    align-items: center;
+    min-height: 122px;
+    padding: 14px;
+    border-radius: 18px;
+    background: #fbf8fd;
+    box-shadow: var(--shadow);
+}
+
+.program-card h3 {
+    margin: 0 0 8px;
+    font-size: 13px;
+}
+
+.program-card p {
+    margin: 0 0 8px;
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+.program-card strong {
+    font-size: 15px;
+}
+
+.program-icon {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #15171a;
+}
+
+.program-icon.green {
+    background: var(--green);
+}
+
+.program-icon.yellow {
+    background: var(--yellow);
+}
+
+.program-icon.purple {
+    background: var(--purple);
+}
+
+.program-icon.blue {
+    background: var(--blue-soft);
+}
+
+.wide {
+    width: 100%;
+    max-width: 260px;
+    margin: 28px auto 0;
+}
+
+.section-label,
+.subheading {
+    margin: 0 0 14px;
+    color: var(--blue);
+    font-size: 14px;
+}
+
+.booking-form {
+    display: grid;
+    gap: 18px;
+}
+
+label {
+    display: grid;
+    gap: 8px;
+    font-size: 12px;
+}
+
+select,
+input {
+    width: 100%;
+    min-height: 48px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--panel);
+    color: #4b5360;
+    padding: 0 18px;
+}
+
+.learners-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+}
+
+.stepper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stepper button,
+.stepper output {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: var(--panel);
+    color: #4b5360;
+    font-weight: 700;
+}
+
+.summary-card {
+    margin: 0;
+    padding: 18px;
+    border-radius: 8px;
+    background: #f7f7f8;
+    display: grid;
+    gap: 14px;
+    font-size: 13px;
+}
+
+.summary-card div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.summary-card dt,
+.summary-card dd {
+    margin: 0;
+}
+
+.summary-card dt,
+.summary-card div:last-child {
+    font-weight: 700;
+    color: #20242a;
+}
+
+.learner-profile {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.avatar {
+    width: 72px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.learner-profile h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+}
+
+.learner-profile a {
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.progress-card,
+.skills-card {
+    position: relative;
+    padding: 24px;
+    border-radius: 16px;
+    background: #fbf8fd;
+    box-shadow: var(--shadow);
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 26px;
+    font-size: 12px;
+}
+
+.meter,
+.skill i {
+    display: block;
+    height: 8px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #d7d9dc;
+}
+
+.meter span,
+.skill b {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+}
+
+.meter span,
+.green-bar {
+    background: var(--green);
+}
+
+.blue-bar {
+    background: var(--blue-soft);
+}
+
+.yellow-bar {
+    background: var(--yellow);
+}
+
+.purple-bar {
+    background: var(--purple);
+}
+
+.progress-card > b {
+    position: absolute;
+    right: 22px;
+    bottom: 20px;
+    font-size: 12px;
+}
+
+.subheading {
+    margin-top: 28px;
+    color: #1b1f25;
+}
+
+.skills-card {
+    display: grid;
+    gap: 22px;
+}
+
+.skill {
+    display: grid;
+    grid-template-columns: 84px 1fr 38px;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+}
+
+.skill strong {
+    color: #1f242b;
+    text-align: right;
+}
+
+.comment-card {
+    padding: 20px 24px;
+    border-radius: 8px;
+    background: #f6f6f7;
+}
+
+.comment-card p {
+    margin: 0 0 16px;
+    line-height: 1.25;
+}
+
+.comment-card span,
+.comment-card time {
+    display: block;
+    color: #4e5661;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.about-body {
+    padding-top: 18px;
+}
+
+.about-image {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+
+.about-body > p {
+    max-width: 300px;
+    margin: 0 0 22px;
+    font-size: 14px;
+}
+
+.contact-card {
+    display: grid;
+    gap: 18px;
+    padding: 22px;
+    border-radius: 18px;
+    background: var(--panel);
+}
+
+.contact-card div {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 14px;
+    align-items: center;
+}
+
+.contact-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #dcdee0;
+    color: #15171a;
+    font-weight: 800;
+}
+
+.contact-card p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.contact-card strong {
+    display: block;
+    color: #20242a;
+}
+
+.message-link {
+    max-width: 250px;
+}
+
+.bottom-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 66px;
+    display: none;
+    align-items: center;
+    justify-content: space-around;
+    background: #fff;
+    border-top: 1px solid #ececf0;
+}
+
+.bottom-nav button {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    color: #181b20;
+    background: transparent;
+}
+
+.bottom-nav button.active {
+    color: var(--blue);
+}
+
+@media (max-width: 760px) {
+    body {
+        background: #fff;
+    }
+
+    .app-shell {
+        display: block;
+        padding: 0;
+    }
+
+    .desktop-nav {
+        display: none;
+    }
+
+    .phone-frame {
+        width: 100%;
+        height: 100vh;
+        min-height: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .home-screen {
+        padding: 22px clamp(24px, 9vw, 42px) 86px;
+    }
+
+    .screen {
+        padding-bottom: 76px;
+    }
+
+    .screen-body {
+        padding-inline: clamp(24px, 9vw, 46px);
+    }
+
+    .bottom-nav {
+        display: flex;
+    }
+}
+
+@media (min-width: 1100px) {
+    .phone-frame {
+        width: min(100%, 1040px);
+        height: min(86vh, 760px);
+        border-radius: 18px;
+    }
+
+    .home-screen {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto 1fr auto;
+        column-gap: 42px;
+        padding: 36px 56px 42px;
+    }
+
+    .home-top,
+    .center-brand {
+        grid-column: 1 / -1;
+    }
+
+    .hero-copy {
+        align-self: center;
+    }
+
+    .hero-copy h2 {
+        max-width: 420px;
+        font-size: 34px;
+    }
+
+    .hero-copy p {
+        max-width: 350px;
+        font-size: 16px;
+    }
+
+    .hero-image {
+        align-self: center;
+        max-height: 360px;
+    }
+
+    .cta-stack {
+        grid-column: 1 / -1;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .screen-body {
+        max-width: 860px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .program-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .booking-form {
+        max-width: 620px;
+    }
+
+    .about-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 48px;
+        align-items: start;
+    }
+
+    .about-image,
+    .about-body > p {
+        grid-column: 1;
+    }
+
+    .contact-card,
+    .message-link {
+        grid-column: 2;
+    }
+}
