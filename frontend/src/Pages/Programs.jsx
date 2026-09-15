@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { api } from "../api";
 
 // Local icons and simple ScreenHeader so this file is self-contained
 function IconBase({ children }) {
@@ -67,42 +68,30 @@ function ScreenHeader({ title, color, backTo, onNavigate }) {
     );
 }
 
-const programs = [
-    {
-        title: "Reading Lessons",
-        color: "green",
-        icon: BookIcon,
-        body: "Phonics, word recognition, reading fluency and comprehension."
-    },
-    {
-        title: "Writing Skills",
-        color: "yellow",
-        icon: PenIcon,
-        body: "Sentence building, handwriting, spelling and creative writing."
-    },
-    {
-        title: "Homework Help",
-        color: "purple",
-        icon: UsersIcon,
-        body: "Assistance with school homework and class activities."
-    },
-    {
-        title: "Speaking Practice",
-        color: "blue",
-        icon: ChatIcon,
-        body: "Improve pronunciation, confidence and everyday communication."
-    }
-];
+const iconByTitle = {
+    "Reading Lessons": BookIcon,
+    "Writing Skills": PenIcon,
+    "Homework Help": UsersIcon,
+    "Speaking Practice": ChatIcon
+};
 
 export default function Programs({ onNavigate }) {
+    const [programs, setPrograms] = useState([]);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        api.getPrograms().then(setPrograms).catch((requestError) => setError(requestError.message));
+    }, []);
+
     return (
         <section className="screen active-screen blue-head">
             <ScreenHeader title="Our Programs" color="blue" backTo="home" onNavigate={onNavigate} />
             <div className="screen-body">
                 <p className="intro">We offer fun and effective English learning programs for Grade 1-3.</p>
+                {error && <p className="form-error" role="alert">{error}</p>}
                 <div className="program-list">
                     {programs.map((program) => {
-                        const Icon = program.icon;
+                        const Icon = iconByTitle[program.title] || BookIcon;
                         return (
                             <article className="program-card" key={program.title}>
                                 <div className={`program-icon ${program.color}`}>
@@ -111,7 +100,7 @@ export default function Programs({ onNavigate }) {
                                 <div>
                                     <h3>{program.title}</h3>
                                     <p>{program.body}</p>
-                                    <strong>R150 / week</strong>
+                                    <strong>R{program.price} / week</strong>
                                 </div>
                             </article>
                         );

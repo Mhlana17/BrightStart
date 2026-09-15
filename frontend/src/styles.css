@@ -34,6 +34,12 @@ button {
     cursor: pointer;
 }
 
+.form-error {
+    margin: 12px 0;
+    color: #b42318;
+    font-size: 14px;
+}
+
 a {
     color: inherit;
 }

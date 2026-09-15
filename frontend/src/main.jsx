@@ -7,12 +7,15 @@ import Programs from "./Pages/Programs";
 import Booking from "./Pages/Bookings";
 import Progress from "./Pages/Progress";
 import About from "./Pages/About";
+import { api } from "./api";
 const pages = ["home", "programs", "booking", "progress", "about"];
 
 function App() {
     const [page, setPage] = useState(getInitialPage);
     const [learners, setLearners] = useState(1);
     const [booked, setBooked] = useState(false);
+    const [bookingSubmitting, setBookingSubmitting] = useState(false);
+    const [bookingError, setBookingError] = useState("");
 
     useEffect(() => {
         window.location.hash = page;
@@ -22,11 +25,29 @@ function App() {
         if (pages.includes(nextPage)) {
             setPage(nextPage);
             setBooked(false);
+            setBookingError("");
         }
     }
 
     function changeLearners(step) {
         setLearners((current) => Math.max(1, Math.min(10, current + step)));
+    }
+
+    async function submitBooking(booking) {
+        setBookingSubmitting(true);
+        setBookingError("");
+        try {
+            await api.createBooking({
+                ...booking,
+                pricePerWeek: 150,
+                totalPrice: booking.learners * 150
+            });
+            setBooked(true);
+        } catch (error) {
+            setBookingError(error.message);
+        } finally {
+            setBookingSubmitting(false);
+        }
     }
 
     return (
@@ -39,8 +60,10 @@ function App() {
                     <Booking
                         learners={learners}
                         booked={booked}
+                        submitting={bookingSubmitting}
+                        error={bookingError}
                         onLearnersChange={changeLearners}
-                        onSubmit={() => setBooked(true)}
+                        onSubmit={submitBooking}
                         onNavigate={navigate}
                     />
                 )}

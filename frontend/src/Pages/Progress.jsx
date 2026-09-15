@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { api } from "../api";
 
 function IconBase({ children }) {
     return (
@@ -28,54 +29,58 @@ function ScreenHeader({ title, backTo, onNavigate }) {
 }
 
 export default function Progress({ onNavigate }) {
-    const skills = [
-        ["Reading", "green-bar", 70],
-        ["Writing", "blue-bar", 60],
-        ["Comprehension", "yellow-bar", 65],
-        ["Speaking", "purple-bar", 75]
-    ];
+    const [progress, setProgress] = useState(null);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        api.getProgress().then(setProgress).catch((requestError) => setError(requestError.message));
+    }, []);
 
     return (
         <section className="screen active-screen purple-head">
             <ScreenHeader title="My Child's Progress" backTo="home" onNavigate={onNavigate} />
             <div className="screen-body">
+                {error && <p className="form-error" role="alert">{error}</p>}
+                {!progress && !error && <p className="intro">Loading progress...</p>}
+                {progress && <>
                 <div className="learner-profile">
                     <img src="/assets/hero-readers.svg" alt="" className="avatar" />
                     <div>
-                        <h3>Lerato Mongameli</h3>
+                        <h3>{progress.learnerName}</h3>
                         <a href="#progress" onClick={(event) => event.preventDefault()}>
-                            Grade 2
+                            {progress.grade}
                         </a>
                     </div>
                 </div>
                 <article className="progress-card">
                     <div className="progress-top">
                         <strong>Overall Progress</strong>
-                        <span>Improving</span>
+                        <span>{progress.status}</span>
                     </div>
                     <div className="meter">
-                        <span style={{ width: "65%" }}></span>
+                        <span style={{ width: `${progress.overallProgress}%` }}></span>
                     </div>
-                    <b>65%</b>
+                    <b>{progress.overallProgress}%</b>
                 </article>
                 <h3 className="subheading">Skills Overview</h3>
                 <article className="skills-card">
-                    {skills.map(([skill, color, value]) => (
-                        <div className="skill" key={skill}>
-                            <span>{skill}</span>
+                    {progress.skills.map((skill) => (
+                        <div className="skill" key={skill.name}>
+                            <span>{skill.name}</span>
                             <i>
-                                <b className={color} style={{ width: `${value}%` }}></b>
+                                <b className={skill.color} style={{ width: `${skill.value}%` }}></b>
                             </i>
-                            <strong>{value}%</strong>
+                            <strong>{skill.value}%</strong>
                         </div>
                     ))}
                 </article>
                 <h3 className="subheading">Tutor Comments</h3>
                 <article className="comment-card">
-                    <p>Lerato is showing great improvement in reading short stories. Keep practicing at home!</p>
-                    <span>Teacher Amanda</span>
-                    <time>20 May 2026</time>
+                    <p>{progress.comment}</p>
+                    <span>{progress.tutor}</span>
+                    <time>{progress.commentDate}</time>
                 </article>
+                </>}
             </div>
         </section>
     );

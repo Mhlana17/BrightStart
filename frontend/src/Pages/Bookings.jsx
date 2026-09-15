@@ -16,7 +16,9 @@ function BackIcon() {
     );
 }
 
-export default function Booking({ learners, booked, onLearnersChange, onSubmit, onNavigate }) {
+export default function Booking({ learners, booked, submitting, error, onLearnersChange, onSubmit, onNavigate }) {
+    const today = new Date().toISOString().slice(0, 10);
+
     return (
         <section className="screen active-screen booking-screen">
             <header className="plain-header">
@@ -31,12 +33,19 @@ export default function Booking({ learners, booked, onLearnersChange, onSubmit, 
                     className="booking-form"
                     onSubmit={(event) => {
                         event.preventDefault();
-                        onSubmit();
+                        const form = new FormData(event.currentTarget);
+                        onSubmit({
+                            grade: form.get("grade"),
+                            sessionType: form.get("sessionType"),
+                            bookingDate: form.get("bookingDate"),
+                            bookingTime: form.get("bookingTime"),
+                            learners
+                        });
                     }}
                 >
                     <label>
                         Select Grade
-                        <select defaultValue="Grade 1">
+                        <select name="grade" defaultValue="Grade 1">
                             <option>Grade 1</option>
                             <option>Grade 2</option>
                             <option>Grade 3</option>
@@ -44,7 +53,7 @@ export default function Booking({ learners, booked, onLearnersChange, onSubmit, 
                     </label>
                     <label>
                         Type of Session
-                        <select defaultValue="Group Session">
+                        <select name="sessionType" defaultValue="Group Session">
                             <option>Group Session</option>
                             <option>Private Session</option>
                             <option>Online Session</option>
@@ -52,11 +61,11 @@ export default function Booking({ learners, booked, onLearnersChange, onSubmit, 
                     </label>
                     <label>
                         Select Date
-                        <input type="date" defaultValue="2026-05-24" />
+                        <input name="bookingDate" type="date" defaultValue={today} min={today} required />
                     </label>
                     <label>
                         Select Time
-                        <input type="time" defaultValue="15:00" />
+                        <input name="bookingTime" type="time" defaultValue="15:00" required />
                     </label>
                     <div className="learners-row">
                         <span>Number of learners</span>
@@ -84,8 +93,9 @@ export default function Booking({ learners, booked, onLearnersChange, onSubmit, 
                             <dd>R{learners * 150}</dd>
                         </div>
                     </dl>
+                    {error && <p className="form-error" role="alert">{error}</p>}
                     <button className="primary-action wide" type="submit">
-                        {booked ? "Booking Requested" : "Book Now"}
+                        {submitting ? "Submitting..." : booked ? "Booking Requested" : "Book Now"}
                     </button>
                 </form>
             </div>

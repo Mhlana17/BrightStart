@@ -51,6 +51,13 @@ It will usually be:
 http://localhost:5173
 ```
 
+The frontend calls the backend at `http://localhost:8080` by default. For a deployed backend,
+create a `.env` file in this folder with:
+
+```bash
+VITE_API_URL=https://your-backend-url
+```
+
 If port `5173` is already being used, Vite may show a different port. Use the exact link shown in the terminal.
 
 ## Useful Commands
@@ -85,15 +92,6 @@ The BrightStart frontend is a responsive React application designed for a childr
 - Progress screen showing learner progress, skill percentages, and tutor comments
 - About/contact screen with phone, WhatsApp, location, and email details
 - Responsive layout for desktop and mobile screens
-
-## Still To Be Done
-
-- Connect the frontend to the backend API
-- Save real booking requests instead of only showing the booking confirmation on the screen
-- Add login or user accounts if the final system requires different users
-- Replace sample learner progress data with real database data
-- Add form validation and user-friendly error messages
-- Add more testing before final submission
 
 ## Notes
 
