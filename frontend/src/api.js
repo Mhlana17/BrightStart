@@ -1,9 +1,11 @@
 const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:8080").replace(/\/$/, "");
 
 async function request(path, options = {}) {
+    const token = localStorage.getItem("brightstart_token");
     const response = await fetch(`${API_URL}${path}`, {
         headers: {
             "Content-Type": "application/json",
+            ...(token ? { Authorization: "Bearer " + token } : {}),
             ...(options.headers || {})
         },
         ...options
@@ -27,6 +29,16 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+    login: (credentials) =>
+        request("/api/auth/login", {
+            method: "POST",
+            body: JSON.stringify(credentials)
+        }),
+    register: (details) =>
+        request("/api/auth/register", {
+            method: "POST",
+            body: JSON.stringify(details)
+        }),
     getPrograms: () => request("/api/programs"),
     getProgress: (learnerId = 1) => request(`/api/progress/${learnerId}`),
     createBooking: (booking) =>
