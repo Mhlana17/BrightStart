@@ -14,7 +14,7 @@ const pages = ["home", "programs", "booking", "progress", "about", "login", "sig
 
 function App() {
     const [page, setPage] = useState(getInitialPage);
-    const [user, setUser] = useState(() => {
+    const [currentUser, setCurrentUser] = useState(() => {
         try {
             return JSON.parse(localStorage.getItem("brightstart_user")) || null;
         } catch {
@@ -31,14 +31,14 @@ function App() {
     }, [page]);
 
     useEffect(() => {
-        if (page === "booking" && !user) {
+        if ((page === "booking" || page === "progress") && !currentUser) {
             setPage("login");
         }
-    }, [page, user]);
+    }, [page, currentUser]);
 
     function navigate(nextPage) {
         if (pages.includes(nextPage)) {
-            if (nextPage === "booking" && !user) {
+            if ((nextPage === "booking" || nextPage === "progress") && !currentUser) {
                 setPage("login");
                 return;
             }
@@ -49,15 +49,15 @@ function App() {
     }
 
     function handleAuthSuccess(authenticatedUser) {
-        setUser(authenticatedUser);
+        setCurrentUser(authenticatedUser);
         localStorage.setItem("brightstart_user", JSON.stringify(authenticatedUser));
-        setPage("booking");
+        setPage("home");
     }
 
-    function logout() {
+    function handleLogout() {
         localStorage.removeItem("brightstart_token");
         localStorage.removeItem("brightstart_user");
-        setUser(null);
+        setCurrentUser(null);
         setPage("home");
     }
 
@@ -84,7 +84,12 @@ function App() {
 
     return (
         <div className="app-shell">
-            <DesktopNav active={page} onNavigate={navigate} user={user} onLogout={logout} />
+            <DesktopNav
+                active={page}
+                onNavigate={navigate}
+                currentUser={currentUser}
+                onLogout={handleLogout}
+            />
             <main className="phone-frame" aria-live="polite">
                 {page === "home" && <Home onNavigate={navigate} />}
                 {page === "programs" && <Programs onNavigate={navigate} />}
@@ -115,7 +120,7 @@ function App() {
     );
 }
 
-function DesktopNav({ active, onNavigate, user, onLogout }) {
+function DesktopNav({ active, onNavigate, currentUser, onLogout }) {
     return (
         <aside className="desktop-nav" aria-label="Desktop navigation">
             <div className="brand-lockup">
@@ -125,7 +130,7 @@ function DesktopNav({ active, onNavigate, user, onLogout }) {
                     <span>English Tutoring</span>
                 </div>
             </div>
-            {pages.filter((item) => item !== "login" && item !== "signup").map((item) => (
+            {["home", "programs", "about"].map((item) => (
                 <button
                     key={item}
                     className={`nav-link ${active === item ? "active" : ""}`}
@@ -134,13 +139,45 @@ function DesktopNav({ active, onNavigate, user, onLogout }) {
                     {labelFor(item)}
                 </button>
             ))}
-            {user ? (
-                <button className="nav-link" onClick={onLogout}>Log out</button>
-            ) : (
-                <button className={`nav-link ${active === "login" ? "active" : ""}`} onClick={() => onNavigate("login")}>
-                    Log in
-                </button>
-            )}
+            <div className="auth-buttons">
+                {currentUser ? (
+                    <>
+                        <button
+                            className="nav-button"
+                            onClick={() => onNavigate("progress")}
+                        >
+                            My Progress
+                        </button>
+                        <button
+                            className="nav-button booking-button"
+                            onClick={() => onNavigate("booking")}
+                        >
+                            Book a Lesson
+                        </button>
+                        <button
+                            className="nav-button logout-button"
+                            onClick={onLogout}
+                        >
+                            Logout
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button
+                            className="nav-button login-button"
+                            onClick={() => onNavigate("login")}
+                        >
+                            Log In
+                        </button>
+                        <button
+                            className="nav-button register-button"
+                            onClick={() => onNavigate("signup")}
+                        >
+                            Register
+                        </button>
+                    </>
+                )}
+            </div>
         </aside>
     );
 }
