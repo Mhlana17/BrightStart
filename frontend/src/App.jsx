@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
+
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./Pages/Home";
@@ -7,7 +7,7 @@ import Programs from "./Pages/Programs";
 import Booking from "./Pages/Bookings";
 import Progress from "./Pages/Progress";
 import About from "./Pages/About";
-import Auth from "./Pages/Auth";
+import Login from "./Pages/Login.jsx";
 import { api } from "./api";
 
 const pages = ["home", "programs", "booking", "progress", "about", "login", "signup"];
@@ -111,7 +111,7 @@ function App() {
                 {page === "progress" && <Progress onNavigate={navigate} />}
                 {page === "about" && <About onNavigate={navigate} />}
                 {(page === "login" || page === "signup") && (
-                    <Auth
+                    <Login
                         mode={page}
                         onModeChange={setPage}
                         onSuccess={handleAuthSuccess}
@@ -244,4 +244,4 @@ function UserIcon() {
     return <IconBase><circle cx="12" cy="8" r="4" /><path d="M4 22a8 8 0 0 1 16 0" /></IconBase>;
 }
 
-createRoot(document.getElementById("root")).render(<App />);
+export default App;

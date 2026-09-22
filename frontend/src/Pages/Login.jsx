@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { api } from "../api";
 
-export default function Auth({
+export default function Login({
                                  mode,
                                  onModeChange,
                                  onSuccess,
