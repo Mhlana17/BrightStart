@@ -14,6 +14,7 @@ const pages = ["home", "programs", "booking", "progress", "about", "login", "sig
 
 function App() {
     const [page, setPage] = useState(getInitialPage);
+    const [redirectAfterLogin, setRedirectAfterLogin] = useState("home");
     const [currentUser, setCurrentUser] = useState(() => {
         try {
             return JSON.parse(localStorage.getItem("brightstart_user")) || null;
@@ -32,6 +33,7 @@ function App() {
 
     useEffect(() => {
         if ((page === "booking" || page === "progress") && !currentUser) {
+            setRedirectAfterLogin(page);
             setPage("login");
         }
     }, [page, currentUser]);
@@ -39,6 +41,7 @@ function App() {
     function navigate(nextPage) {
         if (pages.includes(nextPage)) {
             if ((nextPage === "booking" || nextPage === "progress") && !currentUser) {
+                setRedirectAfterLogin(nextPage);
                 setPage("login");
                 return;
             }
@@ -51,7 +54,8 @@ function App() {
     function handleAuthSuccess(authenticatedUser) {
         setCurrentUser(authenticatedUser);
         localStorage.setItem("brightstart_user", JSON.stringify(authenticatedUser));
-        setPage("home");
+        setPage(redirectAfterLogin);
+        setRedirectAfterLogin("home");
     }
 
     function handleLogout() {
