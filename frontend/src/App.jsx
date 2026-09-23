@@ -199,7 +199,7 @@ function App() {
             <button
                 className="admin-login-link"
                 onClick={() =>
-                    onNavigate("admin-login")
+                    navigate("admin-login")
                 }
             >
                 Admin
