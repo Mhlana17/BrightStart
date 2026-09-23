@@ -1271,15 +1271,6 @@ input {
         border-radius: 12px;
     }
 
-    .admin-login-link {
-        margin-top: auto;
-        border: 0;
-        background: transparent;
-        color: #6b7280;
-        padding: 10px;
-        cursor: pointer;
-        font-size: 13px;
-    }
 
     /* MOBILE */
 

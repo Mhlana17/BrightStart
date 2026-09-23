@@ -364,22 +364,6 @@ function App() {
 
             </main>
 
-            {/*
-             * ADMIN BUTTON
-             *
-             * It now opens the normal login page.
-             *
-             * Login.jsx automatically detects
-             * @brightstart.co.za and calls /admin/signin.
-             */}
-            <button
-                className="admin-login-link"
-                onClick={() =>
-                    navigate("login")
-                }
-            >
-                Admin
-            </button>
 
         </div>
     );
