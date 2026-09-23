@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { api } from "../api";
 
 export default function Login({
-                                 mode,
-                                 onModeChange,
-                                 onSuccess,
-                                 onNavigate
-                             }) {
+                                  mode,
+                                  onModeChange,
+                                  onSuccess,
+                                  onNavigate
+                              }) {
+
     const isLogin = mode === "login";
 
     const [form, setForm] = useState({
@@ -23,21 +24,34 @@ export default function Login({
     const [loading, setLoading] = useState(false);
 
     function updateField(event) {
+
         setForm({
             ...form,
-            [event.target.name]: event.target.value
+            [event.target.name]:
+            event.target.value
         });
     }
 
     async function handleSubmit(event) {
+
         event.preventDefault();
 
         setError("");
 
-        if (!isLogin &&
-            form.password !== form.confirmPassword) {
+        /*
+         * Password confirmation is only required
+         * during normal user registration.
+         */
+        if (
+            !isLogin &&
+            form.password !==
+            form.confirmPassword
+        ) {
 
-            setError("Passwords do not match.");
+            setError(
+                "Passwords do not match."
+            );
+
             return;
         }
 
@@ -45,53 +59,195 @@ export default function Login({
 
         try {
 
+            /*
+             * ==================================================
+             * LOGIN
+             * ==================================================
+             */
             if (isLogin) {
 
-                const response = await api.login({
-                    email: form.email,
-                    password: form.password
-                });
+                const email =
+                    form.email
+                        .trim()
+                        .toLowerCase();
 
+                /*
+                 * BrightStart admin accounts are
+                 * identified by the @brightstart.co.za
+                 * email domain.
+                 */
+                const isAdmin =
+                    email.endsWith(
+                        "@brightstart.co.za"
+                    );
+
+                /*
+                 * ==============================================
+                 * ADMIN LOGIN
+                 * ==============================================
+                 *
+                 * This follows the same basic approach
+                 * as the working AnimeStore project.
+                 */
+                if (isAdmin) {
+
+                    const response =
+                        await api.adminLogin({
+                            email,
+                            password:
+                            form.password
+                        });
+
+                    /*
+                     * Store the JWT.
+                     */
+                    localStorage.setItem(
+                        "brightstart_token",
+                        response.token
+                    );
+
+                    /*
+                     * Store the role.
+                     */
+                    localStorage.setItem(
+                        "brightstart_role",
+                        "ADMIN"
+                    );
+
+                    /*
+                     * Store admin information.
+                     */
+                    localStorage.setItem(
+                        "brightstart_admin",
+                        JSON.stringify({
+                            adminId:
+                            response.adminId,
+                            email:
+                            response.email,
+                            username:
+                            response.username,
+                            role:
+                                "ADMIN"
+                        })
+                    );
+
+                    /*
+                     * Tell App.jsx that this
+                     * was an ADMIN login.
+                     */
+                    onSuccess(
+                        null,
+                        "ADMIN"
+                    );
+
+                    return;
+                }
+
+                /*
+                 * ==============================================
+                 * NORMAL USER LOGIN
+                 * ==============================================
+                 */
+                const response =
+                    await api.login({
+                        email,
+                        password:
+                        form.password
+                    });
+
+                /*
+                 * Store normal-user JWT.
+                 */
                 localStorage.setItem(
                     "brightstart_token",
                     response.token
                 );
 
-                onSuccess(response.user);
+                /*
+                 * Store normal-user role.
+                 */
+                localStorage.setItem(
+                    "brightstart_role",
+                    "USER"
+                );
+
+                /*
+                 * Send user information
+                 * back to App.jsx.
+                 */
+                onSuccess(
+                    response.user,
+                    "USER"
+                );
 
             } else {
 
+                /*
+                 * ==================================================
+                 * NORMAL USER REGISTRATION
+                 * ==================================================
+                 *
+                 * Admins do NOT register here.
+                 */
+
+                const email =
+                    form.email
+                        .trim()
+                        .toLowerCase();
+
                 await api.register({
-                    firstName: form.firstName,
-                    lastName: form.lastName,
-                    email: form.email,
-                    password: form.password,
-                    phoneNumber: form.phoneNumber,
-                    address: form.address
+                    firstName:
+                    form.firstName,
+                    lastName:
+                    form.lastName,
+                    email,
+                    password:
+                    form.password,
+                    phoneNumber:
+                    form.phoneNumber,
+                    address:
+                    form.address
                 });
 
-                // Automatically log the user in after registration
-                const response = await api.login({
-                    email: form.email,
-                    password: form.password
-                });
+                /*
+                 * Automatically log the user
+                 * in after successful registration.
+                 */
+                const response =
+                    await api.login({
+                        email,
+                        password:
+                        form.password
+                    });
 
                 localStorage.setItem(
                     "brightstart_token",
                     response.token
                 );
 
-                onSuccess(response.user);
+                localStorage.setItem(
+                    "brightstart_role",
+                    "USER"
+                );
+
+                onSuccess(
+                    response.user,
+                    "USER"
+                );
             }
 
         } catch (err) {
 
+            /*
+             * Display the backend error.
+             */
             setError(
                 err.message ||
                 "Something went wrong. Please try again."
             );
 
         } finally {
+
             setLoading(false);
         }
     }
@@ -138,6 +294,7 @@ export default function Login({
                         <div className="auth-row">
 
                             <div>
+
                                 <label>
                                     First Name
                                 </label>
@@ -145,14 +302,20 @@ export default function Login({
                                 <input
                                     type="text"
                                     name="firstName"
-                                    value={form.firstName}
-                                    onChange={updateField}
+                                    value={
+                                        form.firstName
+                                    }
+                                    onChange={
+                                        updateField
+                                    }
                                     required
                                     placeholder="First name"
                                 />
+
                             </div>
 
                             <div>
+
                                 <label>
                                     Last Name
                                 </label>
@@ -160,17 +323,23 @@ export default function Login({
                                 <input
                                     type="text"
                                     name="lastName"
-                                    value={form.lastName}
-                                    onChange={updateField}
+                                    value={
+                                        form.lastName
+                                    }
+                                    onChange={
+                                        updateField
+                                    }
                                     required
                                     placeholder="Last name"
                                 />
+
                             </div>
 
                         </div>
                     )}
 
                     <div>
+
                         <label>
                             Email Address
                         </label>
@@ -179,14 +348,18 @@ export default function Login({
                             type="email"
                             name="email"
                             value={form.email}
-                            onChange={updateField}
+                            onChange={
+                                updateField
+                            }
                             required
                             placeholder="you@example.com"
                         />
+
                     </div>
 
                     {!isLogin && (
                         <div>
+
                             <label>
                                 Phone Number
                             </label>
@@ -194,15 +367,21 @@ export default function Login({
                             <input
                                 type="tel"
                                 name="phoneNumber"
-                                value={form.phoneNumber}
-                                onChange={updateField}
+                                value={
+                                    form.phoneNumber
+                                }
+                                onChange={
+                                    updateField
+                                }
                                 placeholder="Phone number"
                             />
+
                         </div>
                     )}
 
                     {!isLogin && (
                         <div>
+
                             <label>
                                 Address
                             </label>
@@ -210,14 +389,20 @@ export default function Login({
                             <input
                                 type="text"
                                 name="address"
-                                value={form.address}
-                                onChange={updateField}
+                                value={
+                                    form.address
+                                }
+                                onChange={
+                                    updateField
+                                }
                                 placeholder="Address"
                             />
+
                         </div>
                     )}
 
                     <div>
+
                         <label>
                             Password
                         </label>
@@ -225,16 +410,22 @@ export default function Login({
                         <input
                             type="password"
                             name="password"
-                            value={form.password}
-                            onChange={updateField}
+                            value={
+                                form.password
+                            }
+                            onChange={
+                                updateField
+                            }
                             required
                             minLength={8}
                             placeholder="Minimum 8 characters"
                         />
+
                     </div>
 
                     {!isLogin && (
                         <div>
+
                             <label>
                                 Confirm Password
                             </label>
@@ -242,11 +433,16 @@ export default function Login({
                             <input
                                 type="password"
                                 name="confirmPassword"
-                                value={form.confirmPassword}
-                                onChange={updateField}
+                                value={
+                                    form.confirmPassword
+                                }
+                                onChange={
+                                    updateField
+                                }
                                 required
                                 placeholder="Confirm password"
                             />
+
                         </div>
                     )}
 
@@ -255,11 +451,13 @@ export default function Login({
                         className="auth-submit"
                         disabled={loading}
                     >
+
                         {loading
                             ? "Please wait..."
                             : isLogin
                                 ? "Log In"
                                 : "Create Account"}
+
                     </button>
 
                 </form>
@@ -267,6 +465,7 @@ export default function Login({
                 <div className="auth-switch">
 
                     {isLogin ? (
+
                         <>
                             <span>
                                 Don't have an account?
@@ -275,13 +474,17 @@ export default function Login({
                             <button
                                 type="button"
                                 onClick={() =>
-                                    onModeChange("signup")
+                                    onModeChange(
+                                        "signup"
+                                    )
                                 }
                             >
                                 Register
                             </button>
                         </>
+
                     ) : (
+
                         <>
                             <span>
                                 Already have an account?
@@ -290,19 +493,25 @@ export default function Login({
                             <button
                                 type="button"
                                 onClick={() =>
-                                    onModeChange("login")
+                                    onModeChange(
+                                        "login"
+                                    )
                                 }
                             >
                                 Log In
                             </button>
                         </>
+
                     )}
 
                 </div>
 
                 <button
+                    type="button"
                     className="auth-back"
-                    onClick={() => onNavigate("home")}
+                    onClick={() =>
+                        onNavigate("home")
+                    }
                 >
                     ← Back to BrightStart
                 </button>
@@ -312,3 +521,4 @@ export default function Login({
         </section>
     );
 }
+

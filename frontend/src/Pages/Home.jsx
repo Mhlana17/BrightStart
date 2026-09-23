@@ -16,6 +16,15 @@ function BellIcon() {
         </IconBase>
     );
 }
+function UserIcon() {
+    return (
+        <IconBase>
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 22a8 8 0 0 1 16 0" />
+        </IconBase>
+    );
+}
+
 
 function CalendarIcon() {
     return (
@@ -43,18 +52,25 @@ function PhoneIcon() {
     );
 }
 
-export default function Home({ onNavigate }) {
+export default function Home({ onNavigate, currentUser }) {
     return (
         <section className="screen active-screen home-screen">
             <header className="home-top">
-                <button className="icon-button menu-button" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <button className="icon-button" aria-label="Notifications">
-                    <BellIcon />
-                </button>
+                <div className="home-profile">
+                    <button
+                        className="profile-button"
+                        aria-label="User profile"
+                    >
+                        <UserIcon />
+                    </button>
+
+                    {currentUser && (
+                        <span className="profile-name">
+            {currentUser.name}
+        </span>
+                    )}
+                </div>
+
             </header>
 
             <div className="center-brand">

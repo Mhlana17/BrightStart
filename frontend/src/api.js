@@ -1,19 +1,35 @@
+
 const API_URL = (
     import.meta.env.VITE_API_URL ||
     "http://localhost:8080"
 ).replace(/\/$/, "");
 
-async function request(path, options = {}) {
+
+/*
+ * ============================================================
+ * GENERIC API REQUEST
+ * ============================================================
+ */
+async function request(
+    path,
+    options = {}
+) {
 
     const token =
-        localStorage.getItem("brightstart_token");
+        localStorage.getItem(
+            "brightstart_token"
+        );
 
     const response = await fetch(
         `${API_URL}${path}`,
         {
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type":
+                    "application/json",
 
+                /*
+                 * Send JWT when available.
+                 */
                 ...(token
                     ? {
                         Authorization:
@@ -44,7 +60,7 @@ async function request(path, options = {}) {
                 message;
 
         } catch {
-            // Keep HTTP status.
+            // Keep HTTP status message.
         }
 
         throw new Error(message);
@@ -57,14 +73,28 @@ async function request(path, options = {}) {
     return response.json();
 }
 
+
+/*
+ * ============================================================
+ * BRIGHTSTART API
+ * ============================================================
+ */
 export const api = {
+
+    /*
+     * ========================================================
+     * NORMAL USER AUTHENTICATION
+     * ========================================================
+     */
 
     login: (credentials) =>
         request(
             "/api/auth/login",
             {
                 method: "POST",
-                body: JSON.stringify(credentials)
+                body: JSON.stringify(
+                    credentials
+                )
             }
         ),
 
@@ -73,84 +103,138 @@ export const api = {
             "/api/auth/register",
             {
                 method: "POST",
-                body: JSON.stringify(details)
+                body: JSON.stringify(
+                    details
+                )
             }
         ),
 
+
+    /*
+     * ========================================================
+     * PROGRAMS
+     * ========================================================
+     */
+
     getPrograms: () =>
-        request("/api/programs"),
+        request(
+            "/api/programs"
+        ),
+
+
+    /*
+     * ========================================================
+     * LEARNER PROGRESS
+     * ========================================================
+     */
 
     getProgress: (learnerId) =>
         request(
             `/api/progress/${learnerId}`
         ),
 
+
+    /*
+     * ========================================================
+     * BOOKINGS
+     * ========================================================
+     */
+
     createBooking: (booking) =>
         request(
             "/api/bookings",
             {
                 method: "POST",
-                body: JSON.stringify(booking)
+                body: JSON.stringify(
+                    booking
+                )
             }
         ),
 
-    /*
-     * ADMIN LOGIN
-     */
 
+    /*
+     * ========================================================
+     * ADMIN AUTHENTICATION
+     * ========================================================
+     *
+     * AdminLogin is handled through Login.jsx.
+     *
+     * Login.jsx detects:
+     *
+     * @brightstart.co.za
+     *
+     * and sends the credentials here.
+     */
     adminLogin: (credentials) =>
         request(
             "/admin/signin",
             {
                 method: "POST",
-                body: JSON.stringify(credentials)
+                body: JSON.stringify(
+                    credentials
+                )
             }
         ),
 
+
     /*
+     * ========================================================
      * ADMIN BOOKINGS
+     * ========================================================
      */
 
     getBookingRequests: () =>
-        request("/admin/bookings"),
+        request(
+            "/admin/bookings"
+        ),
 
     approveBooking: (bookingId) =>
         request(
             `/admin/bookings/${bookingId}/approve`,
-            {
-                method: "PUT"
-            }
-        ),
+{
+    method: "PUT"
+}
+),
 
-    rejectBooking: (bookingId) =>
-        request(
-            `/admin/bookings/${bookingId}/reject`,
-            {
-                method: "PUT"
-            }
-        ),
+rejectBooking: (bookingId) =>
+    request(
+        `/admin/bookings/${bookingId}/reject`,
+        {
+            method: "PUT"
+        }
+    ),
+
 
     /*
+     * ========================================================
      * ADMIN LEARNERS
+     * ========================================================
      */
 
     getLearners: () =>
-        request("/admin/learners"),
+    request(
+        "/admin/learners"
+    ),
 
-    getLearnerProgress: (learnerId) =>
-        request(
-            `/admin/learners/${learnerId}/progress`
-        ),
+    getLearnerProgress: (
+    learnerId
+) =>
+    request(
+        `/admin/learners/${learnerId}/progress`
+    ),
 
     updateLearnerProgress: (
-        learnerId,
-        progress
-    ) =>
-        request(
-            `/admin/learners/${learnerId}/progress`,
-            {
-                method: "PUT",
-                body: JSON.stringify(progress)
-            }
-        )
+    learnerId,
+    progress
+) =>
+    request(
+        `/admin/learners/${learnerId}/progress`,
+        {
+            method: "PUT",
+            body: JSON.stringify(
+                progress
+            )
+        }
+    )
 };
+
