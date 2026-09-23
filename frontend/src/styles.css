@@ -1272,6 +1272,37 @@ input {
         padding: 11px;
         font: inherit;
     }
+    .overall-progress-display {
+        margin: 20px 0;
+        padding: 18px;
+        border-radius: 14px;
+        background: #f3f7ff;
+        border: 1px solid #d9e5ff;
+    }
+
+    .overall-progress-display > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .overall-progress-display span {
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .overall-progress-display strong {
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .overall-progress-display small {
+        display: block;
+        margin-top: 6px;
+        font-size: 13px;
+        opacity: 0.75;
+    }
 
     .save-progress-button {
         border: 0;

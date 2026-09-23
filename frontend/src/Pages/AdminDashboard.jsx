@@ -130,6 +130,25 @@ export default function AdminDashboard({
             [field]: value
         });
     }
+    function calculateOverallProgress(progress) {
+        if (!progress) {
+            return 0;
+        }
+
+        const reading = Number(progress.reading) || 0;
+        const writing = Number(progress.writing) || 0;
+        const comprehension = Number(progress.comprehension) || 0;
+        const speaking = Number(progress.speaking) || 0;
+
+        return Math.round(
+            (
+                reading +
+                writing +
+                comprehension +
+                speaking
+            ) / 4
+        );
+    }
 
     async function saveProgress(event) {
 
@@ -162,11 +181,6 @@ export default function AdminDashboard({
                         speaking:
                             Number(progress.speaking),
 
-                        overallProgress:
-                            Number(
-                                progress.overallProgress
-                            ),
-
                         status:
                         progress.status,
 
@@ -177,7 +191,6 @@ export default function AdminDashboard({
                         progress.tutor
                     }
                 );
-
             setProgress(updated);
 
             setMessage(
@@ -193,6 +206,7 @@ export default function AdminDashboard({
             setSaving(false);
         }
     }
+
 
     return (
         <section className="admin-dashboard">
@@ -460,59 +474,16 @@ export default function AdminDashboard({
                                         }
                                     >
 
-                                        <div className="progress-editor-header">
-
-                                            <div>
-
-                                                <h3>
-                                                    {
-                                                        progress.learnerName
-                                                    }
-                                                </h3>
-
-                                                <p>
-                                                    {
-                                                        progress.email
-                                                    }
-                                                </p>
-
-                                            </div>
-
-                                        </div>
-
                                         <div className="progress-grid">
 
                                             {[
-                                                [
-                                                    "reading",
-                                                    "Reading"
-                                                ],
-                                                [
-                                                    "writing",
-                                                    "Writing"
-                                                ],
-                                                [
-                                                    "comprehension",
-                                                    "Comprehension"
-                                                ],
-                                                [
-                                                    "speaking",
-                                                    "Speaking"
-                                                ],
-                                                [
-                                                    "overallProgress",
-                                                    "Overall Progress"
-                                                ]
+                                                ["reading", "Reading"],
+                                                ["writing", "Writing"],
+                                                ["comprehension", "Comprehension"],
+                                                ["speaking", "Speaking"]
                                             ].map(
-                                                ([
-                                                     field,
-                                                     label
-                                                 ]) => (
-
-                                                    <label
-                                                        key={field}
-                                                    >
-
+                                                ([field, label]) => (
+                                                    <label key={field}>
                                                         {label}
 
                                                         <input
@@ -520,28 +491,50 @@ export default function AdminDashboard({
                                                             min="0"
                                                             max="100"
                                                             value={
-                                                                progress[
-                                                                    field
-                                                                    ]
+                                                                progress[field] ?? 0
                                                             }
-                                                            onChange={(
-                                                                event
-                                                            ) =>
+                                                            onChange={(event) =>
                                                                 updateProgressField(
                                                                     field,
-                                                                    event
-                                                                        .target
-                                                                        .value
+                                                                    event.target.value
                                                                 )
                                                             }
                                                             required
                                                         />
-
                                                     </label>
-
                                                 )
                                             )}
 
+                                        </div>
+
+                                        <div className="overall-progress-display">
+
+                                            <div>
+        <span>
+            Overall Progress
+        </span>
+
+                                                <strong>
+                                                    {calculateOverallProgress(progress)}%
+                                                </strong>
+                                            </div>
+
+                                            <small>
+                                                Automatically calculated from Reading,
+                                                Writing, Comprehension and Speaking.
+                                            </small>
+
+                                        </div>
+                                        <div className="overall-progress-display">
+                                            <span>Overall Progress</span>
+
+                                            <strong>
+                                                {calculateOverallProgress(progress)}%
+                                            </strong>
+
+                                            <small>
+                                                Automatically calculated from the four skill marks.
+                                            </small>
                                         </div>
 
                                         <label>
