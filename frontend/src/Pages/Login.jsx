@@ -1,12 +1,51 @@
+
 import React, { useState } from "react";
 import { api } from "../api";
 
+function PasswordToggle({ visible, onClick, label }) {
+    return (
+        <button
+            type="button"
+            className="password-toggle"
+            onClick={onClick}
+            aria-label={label}
+            title={label}
+        >
+            {visible ? (
+                // Eye with a slash = password is currently visible.
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                >
+                    <path d="M3 3l18 18" />
+                    <path d="M10.58 10.58a2 2 0 0 0 2.83 2.83" />
+                    <path d="M9.88 5.09A10.94 10.94 0 0 1 12 4.5c5.5 0 9 5.5 9 5.5a18.6 18.6 0 0 1-3.14 3.75" />
+                    <path d="M6.61 6.61C4.36 8.14 3 10 3 10s3.5 5.5 9 5.5c1.06 0 2.06-.2 2.96-.54" />
+                </svg>
+            ) : (
+                // Eye = password is hidden.
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                >
+                    <path d="M2.5 12s3.5-5.5 9.5-5.5S21.5 12 21.5 12 18 17.5 12 17.5 2.5 12 2.5 12Z" />
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="2.5"
+                    />
+                </svg>
+            )}
+        </button>
+    );
+}
+
 export default function Login({
-                                  mode,
-                                  onModeChange,
-                                  onSuccess,
-                                  onNavigate
-                              }) {
+    mode,
+    onModeChange,
+    onSuccess,
+    onNavigate
+}) {
 
     const isLogin = mode === "login";
 
@@ -22,6 +61,10 @@ export default function Login({
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    // Controls password visibility.
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     function updateField(event) {
 
@@ -85,9 +128,6 @@ export default function Login({
                  * ==============================================
                  * ADMIN LOGIN
                  * ==============================================
-                 *
-                 * This follows the same basic approach
-                 * as the working AnimeStore project.
                  */
                 if (isAdmin) {
 
@@ -127,7 +167,7 @@ export default function Login({
                             username:
                             response.username,
                             role:
-                                "ADMIN"
+                            "ADMIN"
                         })
                     );
 
@@ -407,19 +447,43 @@ export default function Login({
                             Password
                         </label>
 
-                        <input
-                            type="password"
-                            name="password"
-                            value={
-                                form.password
-                            }
-                            onChange={
-                                updateField
-                            }
-                            required
-                            minLength={8}
-                            placeholder="Minimum 8 characters"
-                        />
+                        <div className="password-input-wrapper">
+
+                            <input
+                                type={
+                                    showPassword
+                                        ? "text"
+                                        : "password"
+                                }
+                                name="password"
+                                value={
+                                    form.password
+                                }
+                                onChange={
+                                    updateField
+                                }
+                                required
+                                minLength={8}
+                                placeholder="Minimum 8 characters"
+                            />
+
+                            <PasswordToggle
+                                visible={
+                                    showPassword
+                                }
+                                onClick={() =>
+                                    setShowPassword(
+                                        !showPassword
+                                    )
+                                }
+                                label={
+                                    showPassword
+                                        ? "Hide password"
+                                        : "Show password"
+                                }
+                            />
+
+                        </div>
 
                     </div>
 
@@ -430,18 +494,42 @@ export default function Login({
                                 Confirm Password
                             </label>
 
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                value={
-                                    form.confirmPassword
-                                }
-                                onChange={
-                                    updateField
-                                }
-                                required
-                                placeholder="Confirm password"
-                            />
+                            <div className="password-input-wrapper">
+
+                                <input
+                                    type={
+                                        showConfirmPassword
+                                            ? "text"
+                                            : "password"
+                                    }
+                                    name="confirmPassword"
+                                    value={
+                                        form.confirmPassword
+                                    }
+                                    onChange={
+                                        updateField
+                                    }
+                                    required
+                                    placeholder="Confirm password"
+                                />
+
+                                <PasswordToggle
+                                    visible={
+                                        showConfirmPassword
+                                    }
+                                    onClick={() =>
+                                        setShowConfirmPassword(
+                                            !showConfirmPassword
+                                        )
+                                    }
+                                    label={
+                                        showConfirmPassword
+                                            ? "Hide confirm password"
+                                            : "Show confirm password"
+                                    }
+                                />
+
+                            </div>
 
                         </div>
                     )}
@@ -521,4 +609,3 @@ export default function Login({
         </section>
     );
 }
-
