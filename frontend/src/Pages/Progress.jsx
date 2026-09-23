@@ -33,7 +33,20 @@ export default function Progress({ onNavigate }) {
     const [error, setError] = useState("");
 
     useEffect(() => {
-        api.getProgress().then(setProgress).catch((requestError) => setError(requestError.message));
+        const user = JSON.parse(
+            localStorage.getItem("brightstart_user")
+        );
+
+        if (!user?.userId) {
+            setError("User account could not be found.");
+            return;
+        }
+
+        api.getProgress(user.userId)
+            .then(setProgress)
+            .catch((requestError) =>
+                setError(requestError.message)
+            );
     }, []);
 
     return (

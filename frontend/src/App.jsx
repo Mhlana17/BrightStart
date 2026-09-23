@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from "react";
-
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import AdminLogin from "./Pages/AdminLogin";
+import AdminDashboard from "./Pages/AdminDashboard";
+import Login from "./Pages/Login.jsx";
 import Home from "./Pages/Home";
 import Programs from "./Pages/Programs";
 import Booking from "./Pages/Bookings";
 import Progress from "./Pages/Progress";
 import About from "./Pages/About";
-import Login from "./Pages/Login.jsx";
 import { api } from "./api";
 
-const pages = ["home", "programs", "booking", "progress", "about", "login", "signup"];
+const pages = [
+    "home",
+    "programs",
+    "booking",
+    "progress",
+    "about",
+    "login",
+    "signup",
+    "admin-login",
+    "admin-dashboard"
+];
+
 
 function App() {
+
     const [page, setPage] = useState(getInitialPage);
     const [redirectAfterLogin, setRedirectAfterLogin] = useState("home");
     const [currentUser, setCurrentUser] = useState(() => {
@@ -26,6 +39,28 @@ function App() {
     const [booked, setBooked] = useState(false);
     const [bookingSubmitting, setBookingSubmitting] = useState(false);
     const [bookingError, setBookingError] = useState("");
+    const [admin, setAdmin] = useState(() => {
+        try {
+            return JSON.parse(
+                localStorage.getItem(
+                    "brightstart_admin"
+                )
+            ) || null;
+        } catch {
+            return null;
+        }
+    });
+
+    useEffect(() => {
+
+        if (
+            page === "admin-dashboard" &&
+            !admin
+        ) {
+            setPage("admin-login");
+        }
+
+    }, [page, admin]);
 
     useEffect(() => {
         window.location.hash = page;
@@ -37,6 +72,33 @@ function App() {
             setPage("login");
         }
     }, [page, currentUser]);
+
+    function handleAdminLogin() {
+        const storedAdmin =
+            JSON.parse(
+                localStorage.getItem(
+                    "brightstart_admin"
+                )
+            );
+
+        setAdmin(storedAdmin);
+        setPage("admin-dashboard");
+    }
+
+    function handleAdminLogout() {
+
+        localStorage.removeItem(
+            "brightstart_token"
+        );
+
+        localStorage.removeItem(
+            "brightstart_admin"
+        );
+
+        setAdmin(null);
+        setPage("home");
+    }
+
 
     function navigate(nextPage) {
         if (pages.includes(nextPage)) {
@@ -93,7 +155,9 @@ function App() {
                 onNavigate={navigate}
                 currentUser={currentUser}
                 onLogout={handleLogout}
+
             />
+
             <main className="phone-frame" aria-live="polite">
                 {page === "home" && <Home onNavigate={navigate} />}
                 {page === "programs" && <Programs onNavigate={navigate} />}
@@ -118,8 +182,28 @@ function App() {
                         onNavigate={navigate}
                     />
                 )}
+                {page === "admin-login" && (
+                    <AdminLogin
+                        onSuccess={handleAdminLogin}
+                        onNavigate={navigate}
+                    />
+                )}
+
+                {page === "admin-dashboard" && (
+                    <AdminDashboard
+                        onLogout={handleAdminLogout}
+                    />
+                )}
                 <BottomNav active={page} onNavigate={navigate} />
             </main>
+            <button
+                className="admin-login-link"
+                onClick={() =>
+                    onNavigate("admin-login")
+                }
+            >
+                Admin
+            </button>
         </div>
     );
 }
