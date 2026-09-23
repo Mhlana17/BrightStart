@@ -476,6 +476,31 @@ label,
 }
 
 .program-card {
+    .program-select-button {
+        width: 100%;
+        border: 0;
+        text-align: left;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+        transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+    }
+
+    .program-select-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .program-select-button:focus-visible {
+        outline: 3px solid var(--blue);
+        outline-offset: 3px;
+    }
+
+    .program-card-content {
+        min-width: 0;
+    }
     display: grid;
     grid-template-columns: 76px 1fr;
     gap: 16px;

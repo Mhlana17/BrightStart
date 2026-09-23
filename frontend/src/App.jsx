@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import AdminDashboard from "./Pages/AdminDashboard";
 import Login from "./Pages/Login.jsx";
 import Home from "./Pages/Home";
@@ -31,47 +32,64 @@ function isAdminSession() {
 
 function App() {
 
-    const [page, setPage] = useState(getInitialPage);
+    const [page, setPage] =
+        useState(getInitialPage);
 
     const [redirectAfterLogin, setRedirectAfterLogin] =
         useState("home");
 
-    const [currentUser, setCurrentUser] = useState(() => {
-        try {
-            return (
-                JSON.parse(
-                    localStorage.getItem("brightstart_user")
-                ) || null
-            );
-        } catch {
-            return null;
-        }
-    });
+    const [currentUser, setCurrentUser] =
+        useState(() => {
+            try {
+                return (
+                    JSON.parse(
+                        localStorage.getItem(
+                            "brightstart_user"
+                        )
+                    ) || null
+                );
+            } catch {
+                return null;
+            }
+        });
 
-    const [learners, setLearners] = useState(1);
-    const [booked, setBooked] = useState(false);
+    /*
+     * NEW:
+     * Stores the program selected from
+     * the Programs page.
+     */
+    const [selectedProgram, setSelectedProgram] =
+        useState(null);
+
+    const [learners, setLearners] =
+        useState(1);
+
+    const [booked, setBooked] =
+        useState(false);
+
     const [bookingSubmitting, setBookingSubmitting] =
         useState(false);
-    const [bookingError, setBookingError] = useState("");
 
-    const [admin, setAdmin] = useState(() => {
-        try {
-            return (
-                JSON.parse(
-                    localStorage.getItem("brightstart_admin")
-                ) || null
-            );
-        } catch {
-            return null;
-        }
-    });
+    const [bookingError, setBookingError] =
+        useState("");
+
+    const [admin, setAdmin] =
+        useState(() => {
+            try {
+                return (
+                    JSON.parse(
+                        localStorage.getItem(
+                            "brightstart_admin"
+                        )
+                    ) || null
+                );
+            } catch {
+                return null;
+            }
+        });
 
     /*
      * Protect the admin dashboard.
-     *
-     * An admin must have:
-     * 1. A BrightStart JWT
-     * 2. The ADMIN role
      */
     useEffect(() => {
 
@@ -85,14 +103,14 @@ function App() {
     }, [page]);
 
     /*
-     * Keep the URL hash synchronized with the current page.
+     * Keep URL hash synchronized.
      */
     useEffect(() => {
         window.location.hash = page;
     }, [page]);
 
     /*
-     * Protect normal learner pages.
+     * Protect learner-only pages.
      */
     useEffect(() => {
 
@@ -109,7 +127,7 @@ function App() {
     }, [page, currentUser]);
 
     /*
-     * Main navigation function.
+     * Main navigation.
      */
     function navigate(nextPage) {
 
@@ -128,6 +146,7 @@ function App() {
 
             setRedirectAfterLogin(nextPage);
             setPage("login");
+
             return;
         }
 
@@ -140,18 +159,38 @@ function App() {
         ) {
 
             setPage("login");
+
             return;
         }
 
         setPage(nextPage);
+
         setBooked(false);
         setBookingError("");
     }
 
     /*
-     * Handles BOTH learner and admin login.
-     *
-     * Login.jsx tells us which role was authenticated.
+     * NEW:
+     * Called when a user clicks one of the
+     * program cards.
+     */
+    function handleProgramSelect(program) {
+
+        setSelectedProgram(program);
+
+        /*
+         * Go to booking.
+         *
+         * If the user is not logged in,
+         * navigate() will send them to login.
+         * The selectedProgram remains stored
+         * in state while they log in.
+         */
+        navigate("booking");
+    }
+
+    /*
+     * Handles learner/admin login.
      */
     function handleAuthSuccess(
         authenticatedUser,
@@ -185,7 +224,9 @@ function App() {
 
         localStorage.setItem(
             "brightstart_user",
-            JSON.stringify(authenticatedUser)
+            JSON.stringify(
+                authenticatedUser
+            )
         );
 
         setPage(redirectAfterLogin);
@@ -233,6 +274,12 @@ function App() {
 
         setCurrentUser(null);
         setPage("home");
+
+        /*
+         * Clear selected program when
+         * the user logs out.
+         */
+        setSelectedProgram(null);
     }
 
     /*
@@ -252,7 +299,7 @@ function App() {
     }
 
     /*
-     * Submit a booking.
+     * Submit booking.
      */
     async function submitBooking(booking) {
 
@@ -306,6 +353,9 @@ function App() {
                 {page === "programs" && (
                     <Programs
                         onNavigate={navigate}
+                        onSelectProgram={
+                            handleProgramSelect
+                        }
                     />
                 )}
 
@@ -313,13 +363,22 @@ function App() {
                     <Booking
                         learners={learners}
                         booked={booked}
-                        submitting={bookingSubmitting}
+                        submitting={
+                            bookingSubmitting
+                        }
                         error={bookingError}
+                        selectedProgram={
+                            selectedProgram
+                        }
                         onLearnersChange={
                             changeLearners
                         }
-                        onSubmit={submitBooking}
-                        onNavigate={navigate}
+                        onSubmit={
+                            submitBooking
+                        }
+                        onNavigate={
+                            navigate
+                        }
                     />
                 )}
 
@@ -344,7 +403,9 @@ function App() {
                         onSuccess={
                             handleAuthSuccess
                         }
-                        onNavigate={navigate}
+                        onNavigate={
+                            navigate
+                        }
                     />
                 )}
 
@@ -363,7 +424,6 @@ function App() {
                 />
 
             </main>
-
 
         </div>
     );
@@ -391,6 +451,7 @@ function DesktopNav({
                 />
 
                 <div>
+
                     <strong>
                         BrightStart
                     </strong>
@@ -398,6 +459,7 @@ function DesktopNav({
                     <span>
                         English Tutoring
                     </span>
+
                 </div>
 
             </div>
@@ -551,12 +613,6 @@ function getInitialPage() {
             ""
         );
 
-    /*
-     * If somebody manually enters
-     * #admin-dashboard without a valid
-     * admin session, the protection
-     * in useEffect will redirect them.
-     */
     return pages.includes(hashPage)
         ? hashPage
         : "home";
@@ -603,6 +659,7 @@ function CalendarIcon() {
                 height="18"
                 rx="2"
             />
+
             <path d="M16 2v4M8 2v4M3 10h18" />
         </IconBase>
     );
@@ -637,10 +694,10 @@ function UserIcon() {
                 cy="8"
                 r="4"
             />
+
             <path d="M4 22a8 8 0 0 1 16 0" />
         </IconBase>
     );
 }
 
 export default App;
-
