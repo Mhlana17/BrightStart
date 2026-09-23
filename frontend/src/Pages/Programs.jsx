@@ -46,23 +46,19 @@ function ChatIcon() {
     );
 }
 
-function CalendarIcon() {
-    return (
-        <IconBase>
-            <rect x="3" y="4" width="18" height="18" rx="2" />
-            <path d="M16 2v4M8 2v4M3 10h18" />
-        </IconBase>
-    );
-}
-
-function ScreenHeader({ title, color, backTo, onNavigate }) {
+function ScreenHeader({ title, backTo, onNavigate }) {
     return (
         <header className="screen-header">
-            <button className="icon-button back-button" aria-label="Back" onClick={() => onNavigate(backTo)}>
+            <button
+                className="icon-button back-button"
+                aria-label="Back"
+                onClick={() => onNavigate(backTo)}
+            >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
             </button>
+
             <h2>{title}</h2>
         </header>
     );
@@ -75,40 +71,97 @@ const iconByTitle = {
     "Speaking Practice": ChatIcon
 };
 
-export default function Programs({ onNavigate }) {
+export default function Programs({
+                                     onNavigate,
+                                     onSelectProgram
+                                 }) {
     const [programs, setPrograms] = useState([]);
     const [error, setError] = useState("");
 
     useEffect(() => {
-        api.getPrograms().then(setPrograms).catch((requestError) => setError(requestError.message));
+        api.getPrograms()
+            .then(setPrograms)
+            .catch((requestError) => {
+                setError(requestError.message);
+            });
     }, []);
+
+    function handleProgramClick(program) {
+        /*
+         * Store the selected program in App.jsx,
+         * then navigate to the booking page.
+         *
+         * If the user is not logged in, App.jsx will
+         * redirect them to login while keeping the
+         * selected program in state.
+         */
+        onSelectProgram(program);
+        onNavigate("booking");
+    }
 
     return (
         <section className="screen active-screen blue-head">
-            <ScreenHeader title="Our Programs" color="blue" backTo="home" onNavigate={onNavigate} />
+
+            <ScreenHeader
+                title="Our Programs"
+                backTo="home"
+                onNavigate={onNavigate}
+            />
+
             <div className="screen-body">
-                <p className="intro">We offer fun and effective English learning programs for Grade 1-3.</p>
-                {error && <p className="form-error" role="alert">{error}</p>}
+
+                <p className="intro">
+                    We offer fun and effective English learning
+                    programs for Grade 1-3.
+                </p>
+
+                {error && (
+                    <p className="form-error" role="alert">
+                        {error}
+                    </p>
+                )}
+
                 <div className="program-list">
+
                     {programs.map((program) => {
-                        const Icon = iconByTitle[program.title] || BookIcon;
+
+                        const Icon =
+                            iconByTitle[program.title] ||
+                            BookIcon;
+
                         return (
-                            <article className="program-card" key={program.title}>
-                                <div className={`program-icon ${program.color}`}>
+                            <button
+                                type="button"
+                                className="program-card program-select-button"
+                                key={program.title}
+                                onClick={() =>
+                                    handleProgramClick(program)
+                                }
+                                aria-label={`Book ${program.title}`}
+                            >
+                                <div
+                                    className={`program-icon ${program.color}`}
+                                >
                                     <Icon />
                                 </div>
-                                <div>
+
+                                <div className="program-card-content">
+
                                     <h3>{program.title}</h3>
+
                                     <p>{program.body}</p>
-                                    <strong>R{program.price} / week</strong>
+
+                                    <strong>
+                                        R{program.price} / week
+                                    </strong>
+
                                 </div>
-                            </article>
+                            </button>
                         );
                     })}
+
                 </div>
-                <button className="primary-action wide" onClick={() => onNavigate("booking")}>
-                    <CalendarIcon /> Book a Session
-                </button>
+
             </div>
         </section>
     );
