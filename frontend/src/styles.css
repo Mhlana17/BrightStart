@@ -1354,3 +1354,244 @@ input {
         }
     }
 }
+/* ================================
+   PAYMENT PAGE
+================================ */
+
+.payment-screen {
+    padding-bottom: 100px;
+}
+
+.payment-intro {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.payment-icon {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8f2ff;
+}
+
+.payment-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+}
+
+.payment-intro h3 {
+    margin: 2px 0 5px;
+}
+
+.payment-intro p {
+    margin: 0;
+}
+
+.eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.payment-total-card {
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 18px;
+    background: #f5f8fc;
+    border: 1px solid #e3e9f1;
+}
+
+.payment-total-card span,
+.payment-total-card small {
+    display: block;
+}
+
+.payment-total-card span {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.payment-total-card strong {
+    display: block;
+    margin: 4px 0;
+    font-size: 2rem;
+}
+
+.payment-total-card small {
+    opacity: 0.7;
+}
+
+.payment-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.payment-method {
+    border: 2px solid #e2e7ef;
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.payment-method.active {
+    border-color: #2878d4;
+    background: #eef6ff;
+}
+
+.payment-method svg {
+    width: 25px;
+    height: 25px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+}
+
+.eft-icon {
+    font-size: 22px;
+}
+
+.payment-input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.payment-note {
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 12px;
+}
+
+.eft-card {
+    background: #f7f9fc;
+    border: 1px solid #e2e7ef;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.eft-card h3 {
+    margin-top: 0;
+}
+
+.bank-details {
+    margin: 18px 0;
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.bank-details div {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.bank-details div:last-child {
+    border-bottom: none;
+}
+
+.bank-details span {
+    opacity: 0.7;
+}
+
+.bank-details strong {
+    text-align: right;
+}
+
+.payment-success {
+    text-align: center;
+    padding: 35px 20px;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: #e7f8ed;
+    color: #218a4a;
+}
+
+.payment-success h2 {
+    margin-bottom: 10px;
+}
+
+.payment-success > p {
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.payment-receipt {
+    text-align: left;
+    background: #f7f9fc;
+    border: 1px solid #e3e8ef;
+    border-radius: 18px;
+    margin: 25px 0;
+    padding: 16px;
+}
+
+.payment-receipt div {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e5e9ef;
+}
+
+.payment-receipt div:last-child {
+    border-bottom: none;
+}
+
+.payment-receipt span {
+    opacity: 0.7;
+}
+
+.secondary-action {
+    margin-top: 10px;
+}
+
+@media (max-width: 480px) {
+
+    .payment-input-row {
+        grid-template-columns: 1fr;
+    }
+
+    .bank-details div,
+    .payment-receipt div {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .bank-details strong,
+    .payment-receipt strong {
+        text-align: left;
+    }
+}

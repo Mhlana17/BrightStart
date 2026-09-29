@@ -7,6 +7,7 @@ import Login from "./Pages/Login.jsx";
 import Home from "./Pages/Home";
 import Programs from "./Pages/Programs";
 import Booking from "./Pages/Bookings";
+import Payment from "./Pages/Payment";
 import Progress from "./Pages/Progress";
 import About from "./Pages/About";
 
@@ -16,6 +17,7 @@ const pages = [
     "home",
     "programs",
     "booking",
+    "payment",
     "progress",
     "about",
     "login",
@@ -66,6 +68,9 @@ function App() {
 
     const [booked, setBooked] =
         useState(false);
+
+    const [paymentBooking, setPaymentBooking] =
+        useState(null);
 
     const [bookingSubmitting, setBookingSubmitting] =
         useState(false);
@@ -308,14 +313,35 @@ function App() {
 
         try {
 
-            await api.createBooking({
+            const savedBooking =
+                await api.createBooking({
+                    ...booking,
+                    pricePerWeek: 150,
+                    totalPrice:
+                        booking.learners * 150
+                });
+
+            setBooked(true);
+
+            /*
+             * Store the booking information
+             * for the payment page.
+             */
+            setPaymentBooking({
                 ...booking,
-                pricePerWeek: 150,
+                ...savedBooking,
+                program:
+                    selectedProgram?.title ||
+                    "BrightStart Lesson",
                 totalPrice:
+                    savedBooking?.totalPrice ??
                     booking.learners * 150
             });
 
-            setBooked(true);
+            /*
+             * Move directly to payment.
+             */
+            setPage("payment");
 
         } catch (error) {
 
@@ -379,6 +405,13 @@ function App() {
                         onNavigate={
                             navigate
                         }
+                    />
+                )}
+
+                {page === "payment" && (
+                    <Payment
+                        booking={paymentBooking}
+                        onNavigate={navigate}
                     />
                 )}
 
